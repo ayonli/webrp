@@ -1,5 +1,5 @@
 import { asyncTask, AsyncTask, sleep } from "@ayonli/jsext/async"
-import { Result } from "@ayonli/jsext/result"
+import { try_ } from "@ayonli/jsext/result"
 import { unrefTimer } from "@ayonli/jsext/runtime"
 import { toWebSocketStream, WebSocket } from "@ayonli/jsext/ws"
 import { pack, unpack } from "msgpackr"
@@ -87,7 +87,7 @@ export default class ProxyClient {
         const url = new URL("__ping__", this.remoteUrl)
         url.searchParams.set("clientId", this.clientId)
 
-        const result = await Result.try(fetch(url, {
+        const result = await try_(fetch(url, {
             signal: AbortSignal.timeout(5_000),
         }))
         if (!result.ok) {
@@ -232,7 +232,7 @@ export default class ProxyClient {
             }
 
             const req = new Request(url, reqInit)
-            const result = await Result.try(fetch(req))
+            const result = await try_(fetch(req))
 
             if (!result.ok) {
                 this.requestControllers.delete(requestId)

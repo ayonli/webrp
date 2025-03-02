@@ -33,9 +33,15 @@ function createAuthRule(AUTH_RULE: string) {
         const lastIndex = AUTH_RULE.lastIndexOf("/")
         if (lastIndex > 1) {
             const pattern = AUTH_RULE.slice(1, lastIndex)
-            const flags = AUTH_RULE.slice(lastIndex + 1)
+            let flags = AUTH_RULE.slice(lastIndex + 1)
+
             if (flags && flags !== "i") {
                 console.warn("Only 'i' flag is supported in AUTH_RULE.")
+                if (flags.includes("i")) {
+                    flags = "i"
+                } else {
+                    flags = ""
+                }
             }
 
             return new RegExp(pattern, flags || undefined)
